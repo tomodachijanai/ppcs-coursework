@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Diagnostics;
 
 namespace course_work
 {
@@ -20,11 +21,13 @@ namespace course_work
         static void Main(string[] args)
         {
             Console.WriteLine("Program started");
+            var stopwatch = new Stopwatch();
             CS_d = new object();
             CS_e = new object();
             CS_B = new object();
             CS_MO = new object();
             Task[] tasks = new Task[P];
+            stopwatch.Start();
             for (int i = 0; i < P; i++)
             {
                 int index = i;
@@ -32,7 +35,9 @@ namespace course_work
             }
 
             Task.WaitAll(tasks);
+            stopwatch.Stop();
             Console.WriteLine("Program finished");
+            Console.WriteLine("Elapsed: " + stopwatch.ElapsedMilliseconds);
             Console.ReadKey();
         }
 
