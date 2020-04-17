@@ -8,8 +8,9 @@
 #include <iostream>
 #include <string>
 #include <algorithm>
+#include <ctime>
 
-const int N = 16;
+const int N = 128;
 const int P = 8;
 const int H = N/P;
 const int indexes[] = {2,5,8,10,12,15,18,20};
@@ -46,6 +47,11 @@ int main(int argc, char* argv[]) {
 	MPI_Comm_size(MPI_COMM_WORLD, &world_size);
 	MPI_Graph_create(MPI_COMM_WORLD, P, indexes, edges, reorder,  &graph_comm); 
 	MPI_Comm_rank(graph_comm, &tid);
+	clock_t start;
+	if (tid == 0)
+	{
+		start = clock();
+	}
 	printf("Thread %d started\n", tid);
 	fflush(stdout);
 	// 1. Якщо tid = 0, ввести MZ, D, передати MZ та DH іншим процесам.
@@ -181,13 +187,17 @@ int main(int argc, char* argv[]) {
 		}
 		else
 		{
-			printf("Output supressed");
+			printf("Output supressed\n");
 			fflush(stdout);
 		}
 	}
 	printf("Thread %d finished\n", tid);
 	fflush(stdout);
 	MPI_Finalize();
+	if (tid == 0)
+	{
+		std::cout << clock() - start << std::endl;
+	}
 	free(B);
 	free(S);
 	free(Z);
