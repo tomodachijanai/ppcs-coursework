@@ -10,7 +10,7 @@
 #include <algorithm>
 #include <ctime>
 
-const int N = 128;
+const int N = 800;
 const int P = 8;
 const int H = N/P;
 const int indexes[] = {2,5,8,10,12,15,18,20};
@@ -196,7 +196,7 @@ int main(int argc, char* argv[]) {
 	MPI_Finalize();
 	if (tid == 0)
 	{
-		std::cout << clock() - start << std::endl;
+		std::cout << (long double)((clock() - start))/1000 << std::endl;
 	}
 	free(B);
 	free(S);
