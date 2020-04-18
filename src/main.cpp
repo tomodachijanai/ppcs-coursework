@@ -8,7 +8,7 @@
 #include <iostream>
 #include <string>
 #include <algorithm>
-#include <ctime>
+#include <chrono>
 
 const int N = 800;
 const int P = 8;
@@ -47,10 +47,11 @@ int main(int argc, char* argv[]) {
 	MPI_Comm_size(MPI_COMM_WORLD, &world_size);
 	MPI_Graph_create(MPI_COMM_WORLD, P, indexes, edges, reorder,  &graph_comm); 
 	MPI_Comm_rank(graph_comm, &tid);
-	clock_t start;
+	std::chrono::milliseconds start;
 	if (tid == 0)
 	{
-		start = clock();
+		start = std::chrono::duration_cast<std::chrono::milliseconds>(
+			std::chrono::system_clock::now().time_since_epoch());
 	}
 	printf("Thread %d started\n", tid);
 	fflush(stdout);
@@ -196,7 +197,8 @@ int main(int argc, char* argv[]) {
 	MPI_Finalize();
 	if (tid == 0)
 	{
-		std::cout << (long double)((clock() - start))/1000 << std::endl;
+		std::cout << (std::chrono::duration_cast<std::chrono::milliseconds>(
+			std::chrono::system_clock::now().time_since_epoch()) - start).count() << std::endl;
 	}
 	free(B);
 	free(S);
